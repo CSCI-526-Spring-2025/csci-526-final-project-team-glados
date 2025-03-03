@@ -1600,6 +1600,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RedEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6830783479285877706, guid: d3b32ddea339445b1bd6ef339a51719f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8233482445807181424, guid: d3b32ddea339445b1bd6ef339a51719f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1963,7 +1971,10 @@ MonoBehaviour:
   player: {fileID: 1553681768}
   cameraMinX: 0
   cameraMaxX: 100
-  playerOffset: 1.5
+  cameraMinY: 0
+  cameraMaxY: 0
+  playerOffsetX: 1.5
+  playerOffsetY: 2.5
 --- !u!1 &551347699
 GameObject:
   m_ObjectHideFlags: 0
@@ -3028,6 +3039,7 @@ MonoBehaviour:
   laserOrigin: {fileID: 0}
   lineRenderer: {fileID: 0}
   isOn: 1
+  maxShootingDistance: 25
   oscillate: 0
   oscillationSpeed: 0.5
   oscillationAngle: 45

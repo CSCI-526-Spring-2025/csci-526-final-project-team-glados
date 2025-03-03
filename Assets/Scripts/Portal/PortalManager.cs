@@ -69,6 +69,7 @@ public class PortalManager : MonoBehaviour
             activeMirror = mirrorObj;
         }
     }
+
     private bool IsValidMirrorPosition(Vector2 position)
     {
         // Check distance from other mirrors
@@ -96,9 +97,13 @@ public class PortalManager : MonoBehaviour
         RaycastHit2D hit = GetGunRaycastHit();
         if (hit.collider != null)
         {
+            if (hit.transform.CompareTag("NoPortalSurface"))
+                return;
+
             // Check if we can place a portal here
             if (!IsValidPortalPosition(hit.point))
                 return;
+
             // Remove existing portal of same type if it exists
             RemovePortalOfType(type);
 

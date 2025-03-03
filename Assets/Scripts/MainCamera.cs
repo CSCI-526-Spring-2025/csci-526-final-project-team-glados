@@ -7,17 +7,34 @@ public class MainCamera : MonoBehaviour
     public Transform player;
     [SerializeField] public float cameraMinX;
     [SerializeField] public float cameraMaxX;
-    [SerializeField] public float playerOffset;
+    [SerializeField] public float cameraMinY;
+    [SerializeField] public float cameraMaxY;
+    [SerializeField] public float playerOffsetX;
+    [SerializeField] public float playerOffsetY;
 
     void Update()
     {
-        if (player.position.x - transform.position.x > playerOffset && transform.position.x < cameraMaxX)
+        float positionX = transform.position.x;
+        float positionY = transform.position.y;
+
+        if (player.position.x - transform.position.x > playerOffsetX && transform.position.x < cameraMaxX)
         {
-            transform.position = new Vector3(player.position.x - playerOffset, transform.position.y, transform.position.z);
+            positionX = player.position.x - playerOffsetX;
         }
-        else if (transform.position.x - player.position.x > playerOffset && transform.position.x > cameraMinX)
+        else if (transform.position.x - player.position.x > playerOffsetX && transform.position.x > cameraMinX)
         {
-            transform.position = new Vector3(player.position.x + playerOffset, transform.position.y, transform.position.z);
+            positionX = player.position.x + playerOffsetX;
         }
+
+        if (player.position.y - transform.position.y > playerOffsetY && transform.position.y < cameraMaxY)
+        {
+            positionY = player.position.y - playerOffsetY;
+        }
+        else if (transform.position.y - player.position.y > playerOffsetY && transform.position.y > cameraMinY)
+        {
+            positionY = player.position.y + playerOffsetY;
+        }
+
+        transform.position = new Vector3(positionX, positionY, transform.position.z);
     }
 }

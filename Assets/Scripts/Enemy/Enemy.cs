@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -106,7 +107,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected System.Collections.IEnumerator DamageFlash()
+    protected IEnumerator DamageFlash()
     {
         if (spriteRenderer != null)
         {
