@@ -16,6 +16,17 @@ public class HeadTrigger : MonoBehaviour
             float damage = collision.GetComponent<Rigidbody2D>().velocity.magnitude;
             transform.parent.GetComponent<Enemy>().TakeDamage(damage);
         }
+        else if (collision.CompareTag("Box")) {
+            Enemy enemy = transform.parent.GetComponent<Enemy>();
+            if (enemy is RedEnemy) {
+                Debug.Log("RedEnemy hit on head by box! Instantly kill");
+                enemy.TakeDamage(9999f);
+            }
+            else {
+                float damage = collision.GetComponent<Rigidbody2D>().velocity.magnitude;
+                enemy.TakeDamage(damage);
+            }
+        }
     }
     // Start is called before the first frame update
     void Start()
