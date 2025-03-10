@@ -6,6 +6,7 @@ public class HeadTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (GetComponentInParent<EnemyController>() != null) return;
         if (collision.CompareTag("Player"))
         {
             float damage = collision.GetComponent<PlayerController>().GetCurrentVelocityMagnitude();

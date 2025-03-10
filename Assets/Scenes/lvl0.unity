@@ -4781,7 +4781,7 @@ MonoBehaviour:
   maxShootingDistance: 50
   groundLayer:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 4416
   groundCheck: {fileID: 0}
   portalLayer:
     serializedVersion: 2
@@ -5952,6 +5952,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  fallThreshold: -10
   onDeath:
     m_PersistentCalls:
       m_Calls: []

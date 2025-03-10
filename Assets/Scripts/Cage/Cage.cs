@@ -8,6 +8,8 @@ public class Cage : MonoBehaviour
     private GameObject capturedObject;
     private float lastReleaseTime;
     private float releaseCooldown = 0.5f;
+    private Color enemyColor = new Color(0.58f, 0.16f, 0.9f);
+    private Color companionColor = new Color(0.9f, 0.4f, 0.15f);
     public Vector2 normal { get; set; }
     // Start is called before the first frame update
     void Start()
@@ -24,12 +26,28 @@ public class Cage : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (capturedObject == null) isCaptured = false;
         if (isCaptured || Time.time - lastReleaseTime < releaseCooldown) return;
-        if (other.CompareTag("Box") || other.CompareTag("Hostility"))
+        if (capturedObject != null && other.gameObject != capturedObject)
         {
-            // destroy the box and clone it to the cage
+            if (capturedObject.CompareTag("Hostility"))
+            {
+                Destroy(capturedObject.GetComponent<EnemyController>());
+                capturedObject.layer = LayerMask.NameToLayer("Default");
+                capturedObject.GetComponent<SpriteRenderer>().color = enemyColor;
+            }
+        }
+        if (other.CompareTag("Box") || (other.CompareTag("Hostility") && !Enemy.IsTallEnemy(other.gameObject)))
+        {
+            // Destroy the box and clone it to the cage
             capturedObject = Instantiate(other.gameObject);
             Destroy(other.gameObject);
+            if (capturedObject.CompareTag("Hostility") && capturedObject.layer != LayerMask.NameToLayer("Companion"))
+            {
+                capturedObject.AddComponent<EnemyController>();
+                capturedObject.layer = LayerMask.NameToLayer("Companion");
+                capturedObject.GetComponent<SpriteRenderer>().color = companionColor;
+            }
             capturedObject.SetActive(false);
             isCaptured = true;
         }
@@ -37,11 +55,10 @@ public class Cage : MonoBehaviour
 
     public void Release()
     {
-        if (!isCaptured) return;
+        if (!isCaptured || capturedObject == null) return;
         lastReleaseTime = Time.time;
         capturedObject.transform.position = transform.position;
         capturedObject.SetActive(true);
-        capturedObject = null;
         isCaptured = false;
     }
     
