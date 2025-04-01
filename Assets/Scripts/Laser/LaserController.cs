@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class LaserController : MonoBehaviour
@@ -97,6 +98,17 @@ public class LaserController : MonoBehaviour
 
                 if (hit.collider.CompareTag("Player"))
                 {
+                    if (FirebaseManager.instance != null)
+                    {
+                        Vector2 pos = hit.point;
+                        float time = Time.timeSinceLevelLoad;
+                        int level = PlayerStats.levelNumber;
+                        string reason = "Laser";
+
+                        DeathReasonData deathData = new DeathReasonData(reason, pos, time);
+                        FirebaseManager.instance.LogTestData("deathReasons", deathData, level);
+                    }
+
                     playerRespawn.Respawn();
                     break;
                 }
