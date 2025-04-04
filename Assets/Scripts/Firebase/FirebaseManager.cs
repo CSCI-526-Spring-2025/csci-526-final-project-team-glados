@@ -98,7 +98,7 @@ public class FirebaseManager : MonoBehaviour
         SendDatabyPUT(path, json);
     }
 
-    public void LogTestData(string key, object data, int levelNumber)
+    public void LogTestDatabyPOST(string key, object data, int levelNumber)
     {
         string playerID = PlayerStats.playerID;
         string path = $"test/{playerID}/level_{levelNumber}/{key}";
@@ -152,6 +152,12 @@ public class FirebaseManager : MonoBehaviour
             time = time,
         };
 
-        LogTestData("keyPresses", data, level);
+        LogTestDatabyPOST("keyPresses", data, level);
+    }
+
+    public void LogEnemyKill(string reason, Vector2 position, int level)
+    {
+        EnemyKillData data = new EnemyKillData(reason, position, Time.timeSinceLevelLoad);
+        LogTestDatabyPOST("enemy_kills", data, level);
     }
 }

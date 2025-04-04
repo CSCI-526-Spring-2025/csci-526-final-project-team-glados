@@ -92,3 +92,20 @@ public class DeathReasonData
         timestamp = time;
     }
 }
+
+[System.Serializable]
+public class EnemyKillData
+{
+    public string reason;
+    public float posX;
+    public float posY;
+    public float timestamp;
+
+    public EnemyKillData(string reason, Vector2 position, float time)
+    {
+        this.reason = reason;
+        posX = position.x;
+        posY = position.y;
+        timestamp = time;
+    }
+}
