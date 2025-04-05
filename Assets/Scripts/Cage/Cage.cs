@@ -44,7 +44,7 @@ public class Cage : MonoBehaviour
             Destroy(other.gameObject);
             if (capturedObject.CompareTag("Hostility") && capturedObject.layer != LayerMask.NameToLayer("Companion"))
             {
-                 if (FirebaseManager.instance != null)
+                if (FirebaseManager.instance != null)
                     {
                         Vector2 pos = transform.position;
                         int level = PlayerStats.levelNumber;
