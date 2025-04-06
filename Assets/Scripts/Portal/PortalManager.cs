@@ -94,6 +94,8 @@ public class PortalManager : MonoBehaviour
             }
             else
             {
+                activeCage.transform.parent = null; // Workaround for re-positioning from a moving platform
+
                 // Move existing cage
                 activeCage.transform.position = hit.point;
                 activeCage.transform.rotation = Quaternion.Euler(0, 0, cageRotation);
@@ -163,6 +165,8 @@ public class PortalManager : MonoBehaviour
 
     private void CreatePortal(PortalType type)
     {
+        if (Time.timeScale == 0f) return;
+
         RaycastHit2D hit = GetGunRaycastHit(portalPlacementMask);
         if (hit.collider != null)
         {
@@ -245,6 +249,21 @@ public class PortalManager : MonoBehaviour
         activePortals.Clear();
     }
 
+    public GameObject GetCageCapturedObject()
+    {
+        if (activeCage == null)
+        {
+            return null;
+        }
+
+        Cage cage = activeCage.GetComponent<Cage>();
+        if (cage == null)
+        {
+            return null;
+        }
+
+        return cage.capturedObject;
+    }
 }
 
 public enum PortalType

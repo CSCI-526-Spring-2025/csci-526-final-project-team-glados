@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask portalLayer;
+    [SerializeField] private LayerMask trapLayer;
 
     [Header("Interaction Settings")]
     [SerializeField] private KeyCode interactKey = KeyCode.E;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float interactionRange = 2f;
 
+    public static PlayerController instance;
     private Rigidbody2D rb;
     private bool isGrounded;
     private float horizontalInput;
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 intermediatePosition { get; set; }
     public bool fromPortal;
     public LineRenderer lineRenderer;
+    public Vector2 intersectionPoint { get; set; }
     public bool isReflected = false;
 
     // public int maxReflections = 5;
@@ -39,6 +42,14 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         fromPortal = false;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -75,7 +86,7 @@ public class PlayerController : MonoBehaviour
                 int level = PlayerStats.levelNumber;
 
                 JumpEventData jumpData = new JumpEventData(pos, time);
-                FirebaseManager.instance.LogTestDatabyPOST("jumps", jumpData, level);
+                FirebaseManager.instance.LogTestDataByPOST("jumps", jumpData, level);
             }
         }
 
@@ -86,7 +97,7 @@ public class PlayerController : MonoBehaviour
             int level = PlayerStats.levelNumber;
 
             MirrorUseEvent mirrorData = new MirrorUseEvent(pos, time);
-            FirebaseManager.instance.LogTestDatabyPOST("mirror", mirrorData, level);
+            FirebaseManager.instance.LogTestDataByPOST("mirror", mirrorData, level);
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -96,7 +107,7 @@ public class PlayerController : MonoBehaviour
             int level = PlayerStats.levelNumber;
 
             CatchUseEvent catchData = new CatchUseEvent(pos, time);
-            FirebaseManager.instance.LogTestDatabyPOST("catch_ally", catchData, level);
+            FirebaseManager.instance.LogTestDataByPOST("catch_ally", catchData, level);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -106,7 +117,7 @@ public class PlayerController : MonoBehaviour
             int level = PlayerStats.levelNumber;
 
             ReleaseUseEvent releaseData = new ReleaseUseEvent(pos, time);
-            FirebaseManager.instance.LogTestDatabyPOST("release_ally", releaseData, level);
+            FirebaseManager.instance.LogTestDataByPOST("release_ally", releaseData, level);
         }
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -116,7 +127,7 @@ public class PlayerController : MonoBehaviour
             int level = PlayerStats.levelNumber;
 
             LOSUseEvent LOSData = new LOSUseEvent(pos, time);
-            FirebaseManager.instance.LogTestDatabyPOST("toggle_LOS", LOSData, level);
+            FirebaseManager.instance.LogTestDataByPOST("toggle_LOS", LOSData, level);
         }
         
 
@@ -215,7 +226,7 @@ public class PlayerController : MonoBehaviour
 
             while (remainingDistance > 0)
             {
-                RaycastHit2D hit = Physics2D.Raycast(start, direction, remainingDistance, portalLayer | mirrorLayer);
+                RaycastHit2D hit = Physics2D.Raycast(start, direction, remainingDistance, portalLayer | mirrorLayer | trapLayer);
                 
                 if (hit.collider == null)
                 {
@@ -237,6 +248,10 @@ public class PlayerController : MonoBehaviour
                 {
                     break; // Hit something other than a mirror, stop tracing
                 }
+            }
+            if (AimLineIntersectsWithLaser())
+            {
+                linePositions[^1] = intersectionPoint;
             }
             endingPosition = linePositions[^1];
             intermediatePosition = linePositions[^2];
